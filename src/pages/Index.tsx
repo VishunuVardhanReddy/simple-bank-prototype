@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LoginForm from '@/components/LoginForm';
 import RegisterForm from '@/components/RegisterForm';
 import Dashboard from '@/components/Dashboard';
+import Home from '@/components/Home';
 
 interface User {
   accountNumber: string;
@@ -27,7 +28,7 @@ interface Transaction {
 }
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'login' | 'register' | 'dashboard'>('login');
+  const [currentView, setCurrentView] = useState<'home' | 'login' | 'register' | 'dashboard'>('home');
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -88,7 +89,7 @@ const Index = () => {
 
   const handleLogout = () => {
     setCurrentUser(null);
-    setCurrentView('login');
+    setCurrentView('home');
   };
 
   const handleUpdateUser = (updatedUser: User) => {
@@ -101,17 +102,25 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50">
+      {currentView === 'home' && (
+        <Home 
+          onNavigateToLogin={() => setCurrentView('login')}
+          onNavigateToRegister={() => setCurrentView('register')}
+        />
+      )}
+
       {currentView === 'login' && (
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">SecureBank</h1>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">SecureBank</h1>
               <p className="text-gray-600">Your trusted banking partner</p>
             </div>
             <LoginForm 
               onLogin={handleLogin}
               onSwitchToRegister={() => setCurrentView('register')}
+              onBackToHome={() => setCurrentView('home')}
             />
           </div>
         </div>
@@ -121,12 +130,13 @@ const Index = () => {
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">SecureBank</h1>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">SecureBank</h1>
               <p className="text-gray-600">Open your account today</p>
             </div>
             <RegisterForm 
               onRegister={handleRegister}
               onSwitchToLogin={() => setCurrentView('login')}
+              onBackToHome={() => setCurrentView('home')}
             />
           </div>
         </div>
