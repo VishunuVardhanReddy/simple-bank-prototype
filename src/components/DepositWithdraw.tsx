@@ -64,7 +64,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
 
     onUpdateUser(updatedUser);
     setDepositAmount('');
-    toast.success(`Successfully deposited $${amount.toFixed(2)}`);
+    toast.success(`Successfully deposited ₹${amount.toFixed(2)}`);
   };
 
   const handleWithdraw = (e: React.FormEvent) => {
@@ -98,13 +98,13 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
 
     onUpdateUser(updatedUser);
     setWithdrawAmount('');
-    toast.success(`Successfully withdrew $${amount.toFixed(2)}`);
+    toast.success(`Successfully withdrew ₹${amount.toFixed(2)}`);
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
@@ -158,7 +158,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
                       className="text-sm"
                       onClick={() => setDepositAmount(amount.toString())}
                     >
-                      ${amount}
+                      ₹{amount}
                     </Button>
                   ))}
                 </div>
@@ -168,7 +168,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
                   className="w-full bg-green-600 hover:bg-green-700"
                   disabled={!depositAmount}
                 >
-                  Deposit {depositAmount && `$${parseFloat(depositAmount).toFixed(2)}`}
+                  Deposit {depositAmount && `₹${parseFloat(depositAmount).toFixed(2)}`}
                 </Button>
               </form>
             </CardContent>
@@ -212,7 +212,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
                       className="text-sm"
                       onClick={() => setWithdrawAmount(amount.toString())}
                     >
-                      ${amount}
+                      ₹{amount}
                     </Button>
                   ))}
                 </div>
@@ -222,7 +222,7 @@ const DepositWithdraw: React.FC<DepositWithdrawProps> = ({ user, onUpdateUser })
                   className="w-full bg-red-600 hover:bg-red-700"
                   disabled={!withdrawAmount || parseFloat(withdrawAmount) > user.balance}
                 >
-                  Withdraw {withdrawAmount && `$${parseFloat(withdrawAmount).toFixed(2)}`}
+                  Withdraw {withdrawAmount && `₹${parseFloat(withdrawAmount).toFixed(2)}`}
                 </Button>
               </form>
             </CardContent>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -54,7 +55,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin
     }
 
     if (parseFloat(formData.initialDeposit) < 100) {
-      setError('Initial deposit must be at least $100');
+      setError('Initial deposit must be at least ₹100');
       return;
     }
 
@@ -144,12 +145,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="initialDeposit">Initial Deposit ($)</Label>
+            <Label htmlFor="initialDeposit">Initial Deposit (₹)</Label>
             <Input
               id="initialDeposit"
               name="initialDeposit"
               type="number"
-              placeholder="Minimum $100"
+              placeholder="Minimum ₹100"
               value={formData.initialDeposit}
               onChange={handleChange}
               min="100"

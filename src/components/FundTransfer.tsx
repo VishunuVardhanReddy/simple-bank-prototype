@@ -118,13 +118,13 @@ const FundTransfer: React.FC<FundTransferProps> = ({ user, onUpdateUser, allUser
     setAmount('');
     setDescription('');
     
-    toast.success(`Successfully transferred $${transferAmount.toFixed(2)} to ${recipient.fullName}`);
+    toast.success(`Successfully transferred ₹${transferAmount.toFixed(2)} to ${recipient.fullName}`);
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
@@ -224,7 +224,7 @@ const FundTransfer: React.FC<FundTransferProps> = ({ user, onUpdateUser, allUser
               className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={!recipientAccount || !amount || parseFloat(amount) > user.balance || otherUsers.length === 0}
             >
-              Transfer {amount && `$${parseFloat(amount).toFixed(2)}`}
+              Transfer {amount && `₹${parseFloat(amount).toFixed(2)}`}
             </Button>
           </form>
         </CardContent>
