@@ -1,17 +1,17 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Home } from 'lucide-react';
 
 interface RegisterFormProps {
   onRegister: (userData: any) => string;
   onSwitchToLogin: () => void;
+  onBackToHome: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin, onBackToHome }) => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -74,9 +74,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister, onSwitchToLogin
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            Create Account
+          </CardTitle>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBackToHome}
+            className="text-gray-500 hover:text-purple-600"
+          >
+            <Home className="w-4 h-4" />
+          </Button>
+        </div>
         <CardDescription className="text-center">
           Fill in your details to open a new bank account
         </CardDescription>
