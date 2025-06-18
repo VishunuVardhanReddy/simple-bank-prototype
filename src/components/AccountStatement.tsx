@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Download, ArrowUpRight, ArrowDownLeft, ArrowRightLeft } from 'lucide-react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 interface User {
   accountNumber: string;
@@ -88,26 +89,63 @@ const AccountStatement: React.FC<AccountStatementProps> = ({ user }) => {
   };
 
   const downloadStatement = () => {
-    const csvContent = [
-      ['Date', 'Type', 'Description', 'Amount', 'Balance'].join(','),
-      ...filteredTransactions.map(t => [
-        t.date,
-        t.type,
-        t.description,
-        t.amount,
-        t.balance
-      ].join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `account_statement_${user.accountNumber}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(18);
+    doc.setTextColor(80, 80, 80);
+    doc.text('SecureBank - Account Statement', 20, 20);
+    
+    // Account details
+    doc.setFontSize(12);
+    doc.text(`Account Number: ${user.accountNumber}`, 20, 35);
+    doc.text(`Account Holder: ${user.fullName}`, 20, 45);
+    doc.text(`Statement Date: ${new Date().toLocaleDateString('en-IN')}`, 20, 55);
+    doc.text(`Current Balance: ${formatCurrency(user.balance)}`, 20, 65);
+    
+    // Line separator
+    doc.line(20, 75, 190, 75);
+    
+    // Table data
+    const tableData = filteredTransactions.map(transaction => [
+      transaction.date,
+      transaction.description,
+      transaction.type === 'deposit' || transaction.type === 'transfer_in' ? 'Credit' : 'Debit',
+      transaction.type === 'deposit' || transaction.type === 'transfer_in' 
+        ? formatCurrency(transaction.amount) 
+        : '-',
+      transaction.type === 'withdrawal' || transaction.type === 'transfer_out' 
+        ? formatCurrency(transaction.amount) 
+        : '-',
+      formatCurrency(transaction.balance)
+    ]);
+    
+    // Table
+    (doc as any).autoTable({
+      head: [['Date', 'Description', 'Type', 'Credit', 'Debit', 'Balance']],
+      body: tableData,
+      startY: 85,
+      styles: {
+        fontSize: 10,
+        cellPadding: 3
+      },
+      headStyles: {
+        fillColor: [59, 130, 246],
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [245, 247, 250]
+      },
+      columnStyles: {
+        3: { halign: 'right' }, // Credit column
+        4: { halign: 'right' }, // Debit column
+        5: { halign: 'right' }  // Balance column
+      }
+    });
+    
+    // Save the PDF
+    doc.save(`account_statement_${user.accountNumber}.pdf`);
   };
 
   return (
@@ -123,7 +161,7 @@ const AccountStatement: React.FC<AccountStatementProps> = ({ user }) => {
             </div>
             <Button onClick={downloadStatement} variant="outline" className="flex items-center space-x-2">
               <Download className="w-4 h-4" />
-              <span>Download CSV</span>
+              <span>Download PDF</span>
             </Button>
           </div>
         </CardHeader>
